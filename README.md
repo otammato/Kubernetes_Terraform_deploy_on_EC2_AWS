@@ -146,7 +146,7 @@ resource "aws_instance" "master_instance" {
   associate_public_ip_address = true
   key_name      = "test_delete"
   
-  user_data     = <<SCRIPT
+  user_data     = <<-EOF-SCRIPT
   #!/bin/bash
   sudo yum install docker -y
   sudo systemctl start docker
@@ -168,13 +168,13 @@ resource "aws_instance" "master_instance" {
   sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
   sudo chown $(id -u):$(id -g) $HOME/.kube/config
   kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
-  SCRIPT
+  EOF-SCRIPT
   
   # provisioner "remote-exec" {
-  #  inline = [
-  #    "kubeadm token create --print-join-command > /tmp/k8s_join_cmd.sh",
-  #    "sudo chmod +x /tmp/k8s_join_cmd.sh"
-  #  ]
+  #   inline = [
+  #     "kubeadm token create --print-join-command > /tmp/k8s_join_cmd.sh",
+  #     "sudo chmod +x /tmp/k8s_join_cmd.sh"
+  #   ]
   # }
   
   tags = {
@@ -183,7 +183,7 @@ resource "aws_instance" "master_instance" {
 }
 
 resource "aws_instance" "ansible_slave" {
-  count = 3
+  count = 1
   ami           = data.aws_ssm_parameter.current-ami.value
   instance_type = "t2.medium"
   subnet_id     = aws_subnet.public_subnet.id
@@ -191,7 +191,7 @@ resource "aws_instance" "ansible_slave" {
   associate_public_ip_address = true
   key_name      = "test_delete"
   
-  user_data     = <<SCRIPT
+  user_data     = <<-EOF-SCRIPT
   #!/bin/bash
   sudo yum install docker -y
   sudo systemctl start docker
@@ -208,37 +208,27 @@ resource "aws_instance" "ansible_slave" {
   sudo yum install -y kubelet kubeadm kubectl
   sudo systemctl start kubelet.service
   sudo systemctl enable kubelet.service
-  SCRIPT
+  EOF-SCRIPT
   
   # provisioner "remote-exec" {
-  #  inline = [
-  #    "sudo $(cat /tmp/k8s_join_cmd.sh)"
-  #  ]
-  #}
+  #   inline = [
+  #     "sudo $(cat /tmp/k8s_join_cmd.sh)"
+  #   ]
+  # }
   
   tags = {
     Name = "slave_instance${count.index + 1}"
   }
 }
 
-resource "local_file" "slaves_ips" {
-    content = format("%s\n%s\n%s",
-  aws_instance.ansible_slave.*.private_ip[0],
-  aws_instance.ansible_slave.*.private_ip[1],
-  aws_instance.ansible_slave.*.private_ip[2]
-)
-
-  filename = "inventory"
-}
-
-
 output "master_instance_public_ip" {
-  value = aws_instance.master_instance.public_ip
-}
+   value = aws_instance.master_instance.public_ip
+ }
 
 output "slaves_ips" {
-  value = ["${aws_instance.ansible_slave.*.private_ip}"]
-}
+   value = ["${aws_instance.ansible_slave.*.private_ip}"]
+ }
+
 ```
 
 <br><br>
