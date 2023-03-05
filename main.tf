@@ -141,7 +141,8 @@ resource "aws_instance" "master_instance" {
   associate_public_ip_address = true
   key_name      = "test_delete"
   
-  user_data     = <<-EOF
+  user_data     = <<SCRIPT
+  #!/bin/bash
   sudo yum install docker -y
   sudo systemctl start docker
   sudo systemctl enable docker
@@ -162,7 +163,7 @@ resource "aws_instance" "master_instance" {
   sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
   sudo chown $(id -u):$(id -g) $HOME/.kube/config
   kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
-  EOF
+  SCRIPT
   
   tags = {
     Name = "master_instance"
