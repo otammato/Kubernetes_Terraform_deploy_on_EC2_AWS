@@ -237,4 +237,6 @@ output "slaves_ips" {
 this is for troubleshooting using logs:
 ```
 aws ec2 get-console-output --instance-id i-04d6a246a5f4c08ed --region us-east-1
+
+vi /var/log/cloud-init-output.log
 ```
