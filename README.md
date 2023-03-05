@@ -242,7 +242,7 @@ vi /var/log/cloud-init-output.log
 ```
 
 <br><br>
-on a MASTER INSTANCE get join token:
+on a MASTER INSTANCE get a join token:
 ```
 sudo kubeadm token create --print-join-command
 ```
