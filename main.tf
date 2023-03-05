@@ -46,7 +46,7 @@ resource "aws_subnet" "private_subnet" {
 
 resource "aws_security_group" "ec2_master_security_group" {
   name        = "ec2-master-security-group"
-  description = "Control plane access"
+  description = "Kunernetes control plane access"
   vpc_id      = aws_default_vpc.default.id
 
   ingress {
@@ -101,7 +101,7 @@ resource "aws_security_group" "ec2_master_security_group" {
 
 resource "aws_security_group" "ec2_security_group" {
   name        = "ec2-slave-security-group"
-  description = "Allow ssh and http access"
+  description = "Kunernetes slaves access"
   vpc_id      = aws_default_vpc.default.id
 
   ingress {
@@ -110,15 +110,21 @@ resource "aws_security_group" "ec2_security_group" {
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"] # change this to your ip for the security reasons
   }
+  
+  ingress {
+    from_port   = 10250
+    to_port     = 10250
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"] # change this to your ip for the security reasons
+  }
 
   ingress {
-    from_port   = 80
-    to_port     = 80
+    from_port   = 30000
+    to_port     = 32767
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = ["0.0.0.0/0"] # change this to your ip for the security reasons
   }
   
-
   egress {
     from_port   = 0
     to_port     = 0
