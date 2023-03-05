@@ -170,6 +170,7 @@ resource "aws_instance" "master_instance" {
   kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
   EOF-SCRIPT
   
+  
   # provisioner "remote-exec" {
   #   inline = [
   #     "kubeadm token create --print-join-command > /tmp/k8s_join_cmd.sh",
