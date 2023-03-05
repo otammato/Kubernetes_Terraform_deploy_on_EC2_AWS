@@ -2,7 +2,7 @@
 [ Kubernetes ] Deploy a Kubernetes cluster on EC2 instances using Terraform and Ansible
 
 
-```
+``` tf
 provider "aws" {
   region                    = "us-east-1"
   shared_config_files       = ["/home/ec2-user/.aws/config"]
