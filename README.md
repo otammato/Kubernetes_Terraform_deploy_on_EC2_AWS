@@ -240,3 +240,16 @@ aws ec2 get-console-output --instance-id i-04d6a246a5f4c08ed --region us-east-1
 
 vi /var/log/cloud-init-output.log
 ```
+
+<br><br>
+on a MASTER INSTANCE get join token:
+```
+sudo kubeadm token create --print-join-command
+```
+
+<br><br>
+on each SLAVE INSTANCE join to the cluster (replace with the actual token got on the master):
+
+```
+kubeadm join 172.31.99.163:6443 --token 8zfltv.2rrtauvvlczzwlrj --discovery-token-ca-cert-hash sha256:20f49af140f8ecf1e3876d101ac10db1af44a87951dc57ec26ea9362889f6fc8
+```
