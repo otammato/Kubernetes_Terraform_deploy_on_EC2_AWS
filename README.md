@@ -170,12 +170,12 @@ resource "aws_instance" "master_instance" {
   kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
   SCRIPT
   
-  provisioner "remote-exec" {
-    inline = [
-      "kubeadm token create --print-join-command > /tmp/k8s_join_cmd.sh",
-      "sudo chmod +x /tmp/k8s_join_cmd.sh"
-    ]
-  }
+  # provisioner "remote-exec" {
+  #  inline = [
+  #    "kubeadm token create --print-join-command > /tmp/k8s_join_cmd.sh",
+  #    "sudo chmod +x /tmp/k8s_join_cmd.sh"
+  #  ]
+  # }
   
   tags = {
     Name = "master_instance"
@@ -210,11 +210,11 @@ resource "aws_instance" "ansible_slave" {
   sudo systemctl enable kubelet.service
   SCRIPT
   
-  provisioner "remote-exec" {
-    inline = [
-      "sudo $(cat /tmp/k8s_join_cmd.sh)"
-    ]
-  }
+  # provisioner "remote-exec" {
+  #  inline = [
+  #    "sudo $(cat /tmp/k8s_join_cmd.sh)"
+  #  ]
+  #}
   
   tags = {
     Name = "slave_instance${count.index + 1}"
