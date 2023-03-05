@@ -135,7 +135,7 @@ resource "aws_security_group" "ec2_security_group" {
 
 resource "aws_instance" "master_instance" {
   ami           = data.aws_ssm_parameter.current-ami.value
-  instance_type = "t2.micro"
+  instance_type = "t2.medium"
   subnet_id     = aws_subnet.private_subnet.id
   vpc_security_group_ids = [aws_security_group.ec2_master_security_group.id]
   associate_public_ip_address = true
@@ -155,7 +155,7 @@ resource "aws_instance" "master_instance" {
 resource "aws_instance" "ansible_slave" {
   count = 3
   ami           = data.aws_ssm_parameter.current-ami.value
-  instance_type = "t2.micro"
+  instance_type = "t2.medium"
   subnet_id     = aws_subnet.public_subnet.id
   vpc_security_group_ids = [aws_security_group.ec2_security_group.id]
   associate_public_ip_address = true
