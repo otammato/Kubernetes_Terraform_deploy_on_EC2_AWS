@@ -240,3 +240,7 @@ output "slaves_ips" {
   value = ["${aws_instance.ansible_slave.*.private_ip}"]
 }
 ```
+
+```
+aws ec2 get-console-output --instance-id i-04d6a246a5f4c08ed --region us-east-1
+```
