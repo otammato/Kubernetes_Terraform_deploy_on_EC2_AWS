@@ -9,14 +9,12 @@ provider "aws" {
   shared_credentials_files  = ["/home/ec2-user/.aws/credentials"]
 }
 
-
 data "aws_availability_zones" "available" {
   state = "available"
 }
 data "aws_ssm_parameter" "current-ami" {
   name = "/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2"
 }
-
 
 resource "aws_default_vpc" "default" {
   enable_dns_hostnames = true
@@ -47,7 +45,6 @@ resource "aws_subnet" "private_subnet" {
     Name     = "ansible-private-subnet"
   }
 }
-
 
 resource "aws_security_group" "ec2_master_security_group" {
   name        = "ec2-master-security-group"
