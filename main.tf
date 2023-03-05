@@ -46,12 +46,47 @@ resource "aws_subnet" "private_subnet" {
 
 resource "aws_security_group" "ec2_master_security_group" {
   name        = "ec2-master-security-group"
-  description = "Allow ssh access"
+  description = "Control plane access"
   vpc_id      = aws_default_vpc.default.id
 
   ingress {
     from_port   = 22
     to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"] # change this to your ip for the security reasons
+  }
+  
+  ingress {
+    from_port   = 6443
+    to_port     = 6443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"] # change this to your ip for the security reasons
+  }
+  
+  ingress {
+    from_port   = 2379
+    to_port     = 2380
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"] # change this to your ip for the security reasons
+  }
+  
+  ingress {
+    from_port   = 10250
+    to_port     = 10250
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"] # change this to your ip for the security reasons
+  }
+  
+  ingress {
+    from_port   = 10259
+    to_port     = 10259
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"] # change this to your ip for the security reasons
+  }
+  
+  ingress {
+    from_port   = 10257
+    to_port     = 10257
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"] # change this to your ip for the security reasons
   }
