@@ -165,6 +165,13 @@ resource "aws_instance" "master_instance" {
   kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
   SCRIPT
   
+  provisioner "remote-exec" {
+    inline = [
+      "kubeadm token create --print-join-command > /tmp/k8s_join_cmd.sh",
+      "sudo chmod +x /tmp/k8s_join_cmd.sh"
+    ]
+  }
+  
   tags = {
     Name = "master_instance"
   }
@@ -178,7 +185,32 @@ resource "aws_instance" "ansible_slave" {
   vpc_security_group_ids = [aws_security_group.ec2_security_group.id]
   associate_public_ip_address = true
   key_name      = "test_delete"
-
+  
+  user_data     = <<SCRIPT
+  #!/bin/bash
+  sudo yum install docker -y
+  sudo systemctl start docker
+  sudo systemctl enable docker
+  sudo tee /etc/yum.repos.d/kubernetes.repo <<EOF
+  [kubernetes]
+  name=Kubernetes
+  baseurl=https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64
+  enabled=1
+  gpgcheck=1
+  repo_gpgcheck=1
+  gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+  EOF
+  sudo yum install -y kubelet kubeadm kubectl
+  sudo systemctl start kubelet.service
+  sudo systemctl enable kubelet.service
+  SCRIPT
+  
+  provisioner "remote-exec" {
+    inline = [
+      "sudo $(cat /tmp/k8s_join_cmd.sh)"
+    ]
+  }
+  
   tags = {
     Name = "slave_instance${count.index + 1}"
   }
