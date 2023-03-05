@@ -251,5 +251,5 @@ sudo kubeadm token create --print-join-command
 on each SLAVE INSTANCE join to the cluster (replace with the actual token got on the master):
 
 ```
-kubeadm join 172.31.99.163:6443 --token 8zfltv.2rrtauvvlczzwlrj --discovery-token-ca-cert-hash sha256:20f49af140f8ecf1e3876d101ac10db1af44a87951dc57ec26ea9362889f6fc8
+kubeadm join 171.00.00.163:6443 --token 8zfltv.2rrtauvvlczzwlrj --discovery-token-ca-cert-hash sha256:00000000000000000000000000000000000000000000000000
 ```
