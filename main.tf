@@ -155,16 +155,12 @@ resource "aws_instance" "master_instance" {
   gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
   EOF
   sudo yum install -y kubelet kubeadm kubectl
-
   sudo systemctl start kubelet.service
   sudo systemctl enable kubelet.service
-
   sudo kubeadm init --pod-network-cidr=192.168.0.0/16
-
   mkdir -p $HOME/.kube
   sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
   sudo chown $(id -u):$(id -g) $HOME/.kube/config
-
   kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
 
   
