@@ -1,4 +1,4 @@
-# Kubernetes_Terraform_deploy_on_EKS_AWS
+# Kubernetes_Terraform_deploy_on_EC2_AWS
 [ Kubernetes ] Deploy a Kubernetes cluster on EC2 instances using Terraform
 
 
